@@ -1,0 +1,18 @@
+{
+  "test": "Test",
+  "customer_created": "Customer created",
+  "customer_updated": "Customer updated",
+  "customer_athenticated": "Customer authenticated",
+  "customer_fetched": "Customer fetched",
+  "customers_fetched": "Customers fetched",
+  
+  "administrator_created": "Administrator created",
+  "administrator_fetched": "Administrator fetched",
+  "administrator_updated": "Administrator updated",
+  "administrators_fetched": "Administrators fetched",
+  "administrator_athenticated": "Administrator athenticated",
+
+  "category_created": "Category created",
+
+  "photo_created": "Photo created"
+}
