@@ -18,8 +18,10 @@ export class PaginationService {
       queryBuilder = queryBuilder.where(`${key} > :afterId`, { afterId });
     }
 
-    if (!isNaN(beforeId)) {
+    if (!isNaN(beforeId) && isNaN(afterId)) {
       queryBuilder = queryBuilder.where(`${key} < :beforeId`, { beforeId });
+    } else if (!isNaN(beforeId) && !isNaN(afterId)) {
+      queryBuilder = queryBuilder.andWhere(`${key} < :beforeId`, { beforeId });
     }
 
     queryBuilder.take(isNaN(limit) ? PaginationService.LIMIT : limit);

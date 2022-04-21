@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Action } from 'src/permission/Action.enum';
 import { PermissionGuard } from 'src/permission/permission.guard';
-import { Photo } from 'src/photo/entities/photo.entity';
+import { Product } from '../entities/product.entity';
 
 @Injectable()
 export class CreatePermissionGuard
@@ -12,7 +12,7 @@ export class CreatePermissionGuard
     const req = context.switchToHttp().getRequest();
     const ability = this.getAbility(req);
 
-    if (ability.can(Action.Create, Photo)) return true;
+    if (ability.can(Action.Create, Product)) return true;
 
     throw this.getForbidden();
   }

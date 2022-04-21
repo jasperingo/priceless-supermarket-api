@@ -6,12 +6,14 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { ProductRepository } from './product.repository';
 import { Category } from 'src/category/entities/category.entity';
+import { PaginationService } from 'src/utils/pagination/pagination.service';
 
 @Injectable()
 export class ProductService {
   constructor(
     private readonly dbConnection: Connection,
     private readonly productsRepository: ProductRepository,
+    private readonly paginationService: PaginationService,
   ) {}
 
   create(createProduct: Product, photoId: number, categoryId: number) {
@@ -35,18 +37,24 @@ export class ProductService {
   }
 
   findAll() {
-    return `This action returns all product`;
+    return this.paginationService
+      .paginateQuery(
+        'product.id',
+        this.productsRepository.createQueryBuilder('product'),
+      )
+      .orderBy('product.created_at', 'DESC')
+      .getMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} product`;
+    return this.productsRepository.findOne(id);
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product ${updateProductDto.toString()}`;
-  }
+  update(product: Product, updateProductDto: UpdateProductDto) {
+    Object.keys(updateProductDto).forEach(
+      (prop) => (product[prop] = updateProductDto[prop] ?? product[prop]),
+    );
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+    return this.productsRepository.save(product);
   }
 }
