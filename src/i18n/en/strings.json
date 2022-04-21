@@ -14,5 +14,6 @@
 
   "category_created": "Category created",
 
-  "photo_created": "Photo created"
+  "photo_created": "Photo created",
+  "photo_fetched": "Photo fetched"
 }

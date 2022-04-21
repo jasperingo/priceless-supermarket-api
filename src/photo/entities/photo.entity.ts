@@ -34,4 +34,6 @@ export class Photo {
   @OneToOne(() => Category)
   @JoinColumn({ name: 'category_id' })
   category: Category;
+
+  url = 'oidoo';
 }

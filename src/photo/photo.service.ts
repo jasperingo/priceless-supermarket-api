@@ -28,14 +28,10 @@ export class PhotoService {
   }
 
   findOne(id: number) {
-    return this.photoRepository.findOne(id, { relations: ['category'] });
+    return this.photoRepository.findOne(id);
   }
 
   update(id: number) {
     return `This action updates a #${id} photo`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} photo`;
   }
 }

@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Photo } from './entities/photo.entity';
 import { PhotoRepository } from './photo.repository';
 import { IsNotRelatedConstraint } from './validators/is-not-related-photo.validator';
+import { PermissionModule } from 'src/permission/permission.module';
 
 @Module({
   controllers: [PhotoController],
@@ -18,6 +19,7 @@ import { IsNotRelatedConstraint } from './validators/is-not-related-photo.valida
       imports: [TypeOrmModule.forFeature([PhotoRepository])],
       useClass: MulterConfigService,
     }),
+    PermissionModule,
   ],
   exports: [TypeOrmModule],
 })

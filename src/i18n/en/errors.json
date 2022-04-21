@@ -15,6 +15,7 @@
 
   "id_not_number": "ID has to be a number",
 
+  "photo_do_not_exist": "Photo do not exist",
   "customer_do_not_exist": "Customer do not exist",
   "administrator_do_not_exist": "Administrator do not exist",
 

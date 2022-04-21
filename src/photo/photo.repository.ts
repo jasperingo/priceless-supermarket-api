@@ -7,4 +7,8 @@ export class PhotoRepository extends Repository<Photo> {
     const photo = await this.findOne({ where: { name } });
     return !!photo;
   }
+
+  findOneByName(name: string) {
+    return this.findOne({ where: { name } });
+  }
 }
