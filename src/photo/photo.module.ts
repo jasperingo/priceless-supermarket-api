@@ -8,10 +8,17 @@ import { Photo } from './entities/photo.entity';
 import { PhotoRepository } from './photo.repository';
 import { IsNotRelatedConstraint } from './validators/is-not-related-photo.validator';
 import { PermissionModule } from 'src/permission/permission.module';
+import { PhotoSubscriber } from './entities/photo.subscriber';
+import { PhotoLocationService } from './photo-location.service';
 
 @Module({
   controllers: [PhotoController],
-  providers: [PhotoService, IsNotRelatedConstraint],
+  providers: [
+    PhotoService,
+    PhotoLocationService,
+    IsNotRelatedConstraint,
+    PhotoSubscriber,
+  ],
   imports: [
     TypeOrmModule.forFeature([Photo, PhotoRepository]),
     MulterModule.registerAsync({

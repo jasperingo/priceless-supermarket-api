@@ -13,7 +13,11 @@
   "administrator_athenticated": "Administrator athenticated",
 
   "category_created": "Category created",
+  "category_updated": "Category updated",
+  "category_fetched": "Category fetched",
+  "categories_fetched": "Categories fetched",
 
   "photo_created": "Photo created",
-  "photo_fetched": "Photo fetched"
+  "photo_fetched": "Photo fetched",
+  "photo_updated": "Photo updated"
 }

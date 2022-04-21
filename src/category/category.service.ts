@@ -31,14 +31,18 @@ export class CategoryService {
   }
 
   findAll() {
-    return `This action returns all category`;
+    return this.categoryRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} category`;
+    return this.categoryRepository.findOne(id);
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category ${updateCategoryDto.toString()}`;
+  update(category: Category, updateCategoryDto: UpdateCategoryDto) {
+    Object.keys(updateCategoryDto).forEach(
+      (prop) => (category[prop] = updateCategoryDto[prop] ?? category[prop]),
+    );
+
+    return this.categoryRepository.save(category);
   }
 }

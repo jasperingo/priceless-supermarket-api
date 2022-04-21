@@ -35,5 +35,5 @@ export class Photo {
   @JoinColumn({ name: 'category_id' })
   category: Category;
 
-  url = 'oidoo';
+  url = null;
 }

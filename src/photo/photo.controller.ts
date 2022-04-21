@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Patch,
-  Param,
   UseInterceptors,
   UploadedFile,
   UseGuards,
@@ -19,17 +18,19 @@ import { PhotoValidationPipe } from './pipes/photo-validation.pipe';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Response as ExpressResponse } from 'express';
 import { createReadStream } from 'fs';
-import { join } from 'path';
 import { CreatePermissionGuard } from './guards/create-permission.guard';
 import { FetchBinaryGuard } from './guards/fetch-binary.guard';
 import { DataParam } from 'src/utils/data-param.decorator';
 import { Photo } from './entities/photo.entity';
 import { FetchGuard } from './guards/fetch.guard';
+import { PhotoLocationService } from './photo-location.service';
+import { UpdatePermissionGuard } from './guards/update-permission.guard';
 
 @Controller('photos')
 export class PhotoController {
   constructor(
     private readonly photoService: PhotoService,
+    private readonly photoLocationService: PhotoLocationService,
     private readonly modelMapperService: ModelMapperService,
   ) {}
 
@@ -42,11 +43,6 @@ export class PhotoController {
       'strings.photo_created',
       this.modelMapperService.entityToDto(PhotoDto, newPhoto),
     );
-  }
-
-  @Get()
-  findAll() {
-    return this.photoService.findAll();
   }
 
   @Get(':id')
@@ -64,16 +60,28 @@ export class PhotoController {
     @DataParam('photo') photo: Photo,
     @Response({ passthrough: true }) res: ExpressResponse,
   ) {
-    const file = createReadStream(join(process.cwd(), 'upload', photo.name));
+    const file = createReadStream(this.photoLocationService.path(photo));
+
     res.set({
       'Content-Type': photo.mimeType,
       'Content-Disposition': `attachment; filename="${photo.name}"`,
     });
+
     return new StreamableFile(file);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string) {
-    return this.photoService.update(+id);
+  @UseGuards(FetchGuard, JwtAuthGuard, UpdatePermissionGuard)
+  @UseInterceptors(FileInterceptor('photo'))
+  async update(
+    @DataParam('photo') photo: Photo,
+    @UploadedFile(PhotoValidationPipe) uploadedPhoto: Express.Multer.File,
+  ) {
+    const updatedPhoto = await this.photoService.update(photo, uploadedPhoto);
+
+    return AppResponseDTO.success(
+      'strings.photo_updated',
+      this.modelMapperService.entityToDto(PhotoDto, updatedPhoto),
+    );
   }
 }

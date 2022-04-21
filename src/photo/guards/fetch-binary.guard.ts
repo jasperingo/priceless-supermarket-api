@@ -4,12 +4,17 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { access } from 'fs/promises';
 import { ErrorCode } from 'src/error/error-code.constants';
+import { PhotoLocationService } from '../photo-location.service';
 import { PhotoRepository } from '../photo.repository';
 
 @Injectable()
 export class FetchBinaryGuard implements CanActivate {
-  constructor(private photoRepository: PhotoRepository) {}
+  constructor(
+    private photoRepository: PhotoRepository,
+    private readonly photoLocation: PhotoLocationService,
+  ) {}
 
   async canActivate(context: ExecutionContext) {
     const req = context.switchToHttp().getRequest();
@@ -23,11 +28,15 @@ export class FetchBinaryGuard implements CanActivate {
 
     const photo = await this.photoRepository.findOneByName(photoName);
 
-    if (!photo)
+    try {
+      if (photo) await access(this.photoLocation.path(photo));
+      else throw new Error();
+    } catch {
       throw new NotFoundException(
         'errors.photo_do_not_exist',
         ErrorCode.PHOTO_DO_NOT_EXIST,
       );
+    }
 
     req.data ? (req.data.photo = photo) : (req.data = { photo });
 

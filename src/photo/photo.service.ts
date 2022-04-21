@@ -23,15 +23,17 @@ export class PhotoService {
     return this.photoRepository.save(newPhoto);
   }
 
-  findAll() {
-    return `This action returns all photo`;
-  }
-
   findOne(id: number) {
     return this.photoRepository.findOne(id);
   }
 
-  update(id: number) {
-    return `This action updates a #${id} photo`;
+  async update(photo: Photo, uploaded: Express.Multer.File) {
+    const dimensions = await this.getDimensions(uploaded);
+    photo.name = uploaded.filename;
+    photo.mimeType = uploaded.mimetype;
+    photo.size = uploaded.size;
+    photo.width = dimensions.width;
+    photo.height = dimensions.height;
+    return this.photoRepository.save(photo);
   }
 }

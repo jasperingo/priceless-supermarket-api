@@ -60,7 +60,7 @@ import { PhotoModule } from './photo/photo.module';
     PaginationService,
   ],
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ expandVariables: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -90,6 +90,7 @@ import { PhotoModule } from './photo/photo.module';
     PhotoModule,
   ],
   exports: [
+    ConfigModule,
     ModelMapperService,
     PasswordHashService,
     StringGeneratorService,

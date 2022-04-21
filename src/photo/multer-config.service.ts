@@ -8,6 +8,7 @@ import {
 import { PhotoRepository } from './photo.repository';
 import { StringGeneratorService } from 'src/utils/string-generator/string-generator.service';
 import { ErrorCode } from 'src/error/error-code.constants';
+import { PhotoLocationService } from './photo-location.service';
 
 @Injectable()
 export class MulterConfigService implements MulterOptionsFactory {
@@ -42,7 +43,7 @@ export class MulterConfigService implements MulterOptionsFactory {
           }
         },
         destination: (req, file, cb) => {
-          cb(null, './upload');
+          cb(null, PhotoLocationService.DIRECTORY);
         },
       }),
     };
