@@ -3,6 +3,12 @@ import { Product } from './entities/product.entity';
 
 @EntityRepository(Product)
 export class ProductRepository extends Repository<Product> {
+  getQueryBuilder() {
+    return this.createQueryBuilder('product')
+      .leftJoinAndSelect('product.photo', 'photo')
+      .leftJoinAndSelect('product.category', 'category');
+  }
+
   async existsByName(name: string) {
     try {
       await this.findOneOrFail({ select: ['id'], where: { name } });

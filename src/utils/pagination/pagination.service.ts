@@ -9,23 +9,42 @@ export class PaginationService {
 
   constructor(@Inject(REQUEST) private readonly request: Request) {}
 
-  paginateQuery<T>(key: string, queryBuilder: SelectQueryBuilder<T>) {
+  paginateQuery<T>(
+    key: string,
+    queryBuilder: SelectQueryBuilder<T>,
+    startWhereClause = true,
+  ) {
+    const { afterId, beforeId, hasAfterId, hasBeforeId, limit } =
+      this.getParams();
+
+    if (hasAfterId) {
+      startWhereClause
+        ? queryBuilder.where(`${key} > :afterId`, { afterId })
+        : queryBuilder.andWhere(`${key} > :afterId`, { afterId });
+    }
+
+    if (hasBeforeId) {
+      !hasAfterId && startWhereClause
+        ? queryBuilder.where(`${key} < :beforeId`, { beforeId })
+        : queryBuilder.andWhere(`${key} < :beforeId`, { beforeId });
+    }
+
+    queryBuilder.take(limit);
+
+    return queryBuilder;
+  }
+
+  getParams() {
     const limit = Number(this.request.query.limit);
     const afterId = Number(this.request.query.after);
     const beforeId = Number(this.request.query.before);
 
-    if (!isNaN(afterId)) {
-      queryBuilder = queryBuilder.where(`${key} > :afterId`, { afterId });
-    }
-
-    if (!isNaN(beforeId) && isNaN(afterId)) {
-      queryBuilder = queryBuilder.where(`${key} < :beforeId`, { beforeId });
-    } else if (!isNaN(beforeId) && !isNaN(afterId)) {
-      queryBuilder = queryBuilder.andWhere(`${key} < :beforeId`, { beforeId });
-    }
-
-    queryBuilder.take(isNaN(limit) ? PaginationService.LIMIT : limit);
-
-    return queryBuilder;
+    return {
+      afterId,
+      beforeId,
+      hasAfterId: !isNaN(afterId),
+      hasBeforeId: !isNaN(beforeId),
+      limit: isNaN(limit) ? PaginationService.LIMIT : limit,
+    };
   }
 }

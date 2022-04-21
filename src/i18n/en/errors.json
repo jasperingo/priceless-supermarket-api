@@ -2,6 +2,7 @@
   "field_required": "This field is required",
   "field_not_number": "This field has to be a number",
   "field_not_boolean": "This field has to be a boolean",
+  "field_min_length": "This field is below the minimium allowed length",
   "name_exists": "This name already exists",
   "barcode_exists": "This barcode already exists",
   "email_address_invalid": "This email address is invalid",

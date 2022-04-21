@@ -28,7 +28,7 @@ export class CustomerService {
         'customer.id',
         this.customersRepository.createQueryBuilder('customer'),
       )
-      .orderBy('customer.created_at', 'DESC')
+      .orderBy('customer.createdAt', 'DESC')
       .getMany();
   }
 

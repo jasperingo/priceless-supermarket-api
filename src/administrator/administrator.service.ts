@@ -33,7 +33,7 @@ export class AdministratorService {
         'administrator.id',
         this.administratorsRepository.createQueryBuilder('administrator'),
       )
-      .orderBy('administrator.created_at', 'DESC')
+      .orderBy('administrator.createdAt', 'DESC')
       .getMany();
   }
 

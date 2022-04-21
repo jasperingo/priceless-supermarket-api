@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  UseGuards,
+  Query,
+} from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -12,6 +20,7 @@ import { FetchGuard } from './guards/fetch.guard';
 import { OptionalJwtAuthGuard } from 'src/auth/optional-jwt-auth.guard';
 import { DataParam } from 'src/utils/data-param.decorator';
 import { UpdatePermissionGuard } from './guards/update-permission.guard';
+import { SearchProductDto } from './dto/search-product.dto';
 
 @Controller('products')
 export class ProductController {
@@ -38,6 +47,15 @@ export class ProductController {
   @Get()
   async findAll() {
     const products = await this.productService.findAll();
+    return AppResponseDTO.success(
+      'strings.products_fetched',
+      this.modelMapperService.entityToDto(ProductDto, products),
+    );
+  }
+
+  @Get('search')
+  async search(@Query() search: SearchProductDto) {
+    const products = await this.productService.search(search);
     return AppResponseDTO.success(
       'strings.products_fetched',
       this.modelMapperService.entityToDto(ProductDto, products),
