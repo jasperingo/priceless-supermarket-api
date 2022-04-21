@@ -19,5 +19,9 @@
 
   "photo_created": "Photo created",
   "photo_fetched": "Photo fetched",
-  "photo_updated": "Photo updated"
+  "photo_updated": "Photo updated",
+
+  "product_created": "Product created",
+  "product_fetched": "Product fetched",
+  "product_updated": "Product updated"
 }

@@ -6,10 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { CategoryRepository } from './category.repository';
 import { IsUniqueNameConstraint } from './validators/is-unique-name.validator';
+import { IsExistingPipe } from './pipes/is-existing.pipe';
 
 @Module({
   controllers: [CategoryController],
-  providers: [CategoryService, IsUniqueNameConstraint],
+  providers: [CategoryService, IsUniqueNameConstraint, IsExistingPipe],
   imports: [
     TypeOrmModule.forFeature([Category, CategoryRepository]),
     PermissionModule,

@@ -8,6 +8,27 @@ export const validationErrorMessage = (
   propertyName?: string,
 ) => `${message} | ${errorCode} | ${propertyName}`;
 
+export const requiredErrorMessage = (propertyName?: string) =>
+  validationErrorMessage(
+    'errors.field_required',
+    ErrorCode.FIELD_REQUIRED,
+    propertyName,
+  );
+
+export const numberErrorMessage = (propertyName?: string) =>
+  validationErrorMessage(
+    'errors.field_not_number',
+    ErrorCode.FIELD_NOT_NUMBER,
+    propertyName,
+  );
+
+export const booleanErrorMessage = (propertyName?: string) =>
+  validationErrorMessage(
+    'errors.barcode_exists',
+    ErrorCode.BARCODE_EXISTS,
+    propertyName,
+  );
+
 export const appValidationErrorFactory =
   (i18n: I18nService) =>
   (validationErrors: ValidationError[] = []) =>

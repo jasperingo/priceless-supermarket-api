@@ -1,7 +1,8 @@
 import { Expose } from 'class-transformer';
-import { Allow, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { ErrorCode } from 'src/error/error-code.constants';
 import { validationErrorMessage } from 'src/error/validation-error-message.function';
+import { IsExisting } from 'src/photo/pipes/is-existing.pipe';
 import { IsNotRelatedPhoto } from 'src/photo/validators/is-not-related-photo.validator';
 import { IsUniqueName } from '../validators/is-unique-name.validator';
 
@@ -22,7 +23,13 @@ export class CreateCategoryDto {
   name: string;
 
   @Expose()
-  @Allow()
+  @IsNotEmpty({
+    message: validationErrorMessage(
+      'errors.field_required',
+      ErrorCode.FIELD_REQUIRED,
+    ),
+  })
+  @IsOptional()
   description: string;
 
   @Expose({ name: 'photo_id' })
@@ -33,15 +40,29 @@ export class CreateCategoryDto {
       'photo_id',
     ),
   })
+  @IsExisting({
+    message: validationErrorMessage(
+      'errors.id_do_not_exist',
+      ErrorCode.ID_DO_NOT_EXIST,
+      'photo_id',
+    ),
+  })
   @IsNumber(
     {},
     {
       message: validationErrorMessage(
-        'errors.field_required',
-        ErrorCode.FIELD_REQUIRED,
+        'errors.field_not_number',
+        ErrorCode.FIELD_NOT_NUMBER,
         'photo_id',
       ),
     },
   )
+  @IsNotEmpty({
+    message: validationErrorMessage(
+      'errors.field_required',
+      ErrorCode.FIELD_REQUIRED,
+      'photo_id',
+    ),
+  })
   photoId: number;
 }

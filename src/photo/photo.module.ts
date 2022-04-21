@@ -10,6 +10,7 @@ import { IsNotRelatedConstraint } from './validators/is-not-related-photo.valida
 import { PermissionModule } from 'src/permission/permission.module';
 import { PhotoSubscriber } from './entities/photo.subscriber';
 import { PhotoLocationService } from './photo-location.service';
+import { IsExistingPipe } from './pipes/is-existing.pipe';
 
 @Module({
   controllers: [PhotoController],
@@ -17,6 +18,7 @@ import { PhotoLocationService } from './photo-location.service';
     PhotoService,
     PhotoLocationService,
     IsNotRelatedConstraint,
+    IsExistingPipe,
     PhotoSubscriber,
   ],
   imports: [

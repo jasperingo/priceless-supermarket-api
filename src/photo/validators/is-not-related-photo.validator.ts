@@ -20,7 +20,7 @@ export class IsNotRelatedConstraint implements ValidatorConstraintInterface {
       relations: [property],
     });
 
-    return category[property] === null;
+    return category && category[property] === null;
   }
 }
 

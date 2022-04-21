@@ -24,6 +24,7 @@ import { StringGeneratorService } from './utils/string-generator/string-generato
 import { PaginationService } from './utils/pagination/pagination.service';
 import { CategoryModule } from './category/category.module';
 import { PhotoModule } from './photo/photo.module';
+import { ProductModule } from './product/product.module';
 
 @Global()
 @Module({
@@ -88,6 +89,7 @@ import { PhotoModule } from './photo/photo.module';
     AdministratorModule,
     CategoryModule,
     PhotoModule,
+    ProductModule,
   ],
   exports: [
     ConfigModule,

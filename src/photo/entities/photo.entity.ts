@@ -1,4 +1,5 @@
 import { Category } from 'src/category/entities/category.entity';
+import { Product } from 'src/product/entities/product.entity';
 import {
   Column,
   CreateDateColumn,
@@ -34,6 +35,10 @@ export class Photo {
   @OneToOne(() => Category)
   @JoinColumn({ name: 'category_id' })
   category: Category;
+
+  @OneToOne(() => Product)
+  @JoinColumn({ name: 'product_id' })
+  product: Product;
 
   url = null;
 }

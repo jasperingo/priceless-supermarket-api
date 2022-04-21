@@ -3,11 +3,16 @@ import { Administrator } from 'src/administrator/entities/administrator.entity';
 import { Category } from 'src/category/entities/category.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
 import { Photo } from 'src/photo/entities/photo.entity';
+import { Product } from 'src/product/entities/product.entity';
 import { Action } from './Action.enum';
 
 export type Subjects =
   | InferSubjects<
-      typeof Customer | typeof Administrator | typeof Category | typeof Photo
+      | typeof Customer
+      | typeof Administrator
+      | typeof Category
+      | typeof Photo
+      | typeof Product
     >
   | 'all';
 

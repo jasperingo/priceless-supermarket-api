@@ -5,7 +5,9 @@ import {
   ExtractSubjectType,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
+import { Category } from 'src/category/entities/category.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
+import { Product } from 'src/product/entities/product.entity';
 import { Action } from './Action.enum';
 import { AppAbility, Subjects } from './subject.type';
 
@@ -18,6 +20,7 @@ export class CustomerPermissionFactory {
 
     can(Action.Read, Customer, { id: customer.id });
     can(Action.Update, Customer, { id: customer.id });
+    can([Action.Read, Action.ReadList], [Product, Category]);
 
     return build({
       detectSubjectType: (item) =>

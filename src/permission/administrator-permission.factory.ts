@@ -12,6 +12,7 @@ import {
 import { Category } from 'src/category/entities/category.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
 import { Photo } from 'src/photo/entities/photo.entity';
+import { Product } from 'src/product/entities/product.entity';
 import { Action } from './Action.enum';
 import { AppAbility, Subjects } from './subject.type';
 
@@ -22,11 +23,9 @@ export class AdministratorPermissionFactory {
       Ability as AbilityClass<AppAbility>,
     );
 
-    can(Action.Manage, Photo);
-    can(Action.Manage, Category);
-
     can(Action.Update, Customer, ['status']);
     can([Action.Read, Action.ReadList], Customer);
+    can(Action.Manage, [Photo, Product, Category]);
 
     if (administrator.type === AdministratorType.ASSISTANT) {
       can(Action.Manage, Administrator, { id: administrator.id });

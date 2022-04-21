@@ -1,6 +1,9 @@
 {
   "field_required": "This field is required",
+  "field_not_number": "This field has to be a number",
+  "field_not_boolean": "This field has to be a boolean",
   "name_exists": "This name already exists",
+  "barcode_exists": "This barcode already exists",
   "email_address_invalid": "This email address is invalid",
   "email_address_exists": "This email address already exists",
   "phone_number_invalid": "This phone number is invalid",
@@ -14,6 +17,7 @@
   "permission_denied": "Permission not granted",
 
   "id_not_number": "ID has to be a number",
+  "id_do_not_exist": "ID do not exist",
 
   "photo_do_not_exist": "Photo do not exist",
   "category_do_not_exist": "Category do not exist",
@@ -21,5 +25,6 @@
   "administrator_do_not_exist": "Administrator do not exist",
 
   "photo_name_generation_failed": "A unique photo name could not be generated, please try again",
-  "photo_category_id_exists": "This photo already has a category"
+  "photo_category_id_exists": "This photo already has a category",
+  "photo_product_id_exists": "This photo already has a product"
 }
