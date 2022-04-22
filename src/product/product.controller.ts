@@ -21,6 +21,10 @@ import { OptionalJwtAuthGuard } from 'src/auth/optional-jwt-auth.guard';
 import { DataParam } from 'src/utils/data-param.decorator';
 import { UpdatePermissionGuard } from './guards/update-permission.guard';
 import { SearchProductDto } from './dto/search-product.dto';
+import { ReadPermissionGuard } from './guards/read-permission.guard';
+import { User } from 'src/auth/user.decorator';
+import { Administrator } from 'src/administrator/entities/administrator.entity';
+import { Customer } from 'src/customer/entities/customer.entity';
 
 @Controller('products')
 export class ProductController {
@@ -45,8 +49,9 @@ export class ProductController {
   }
 
   @Get()
-  async findAll() {
-    const products = await this.productService.findAll();
+  @UseGuards(OptionalJwtAuthGuard)
+  async findAll(@User() user: Customer | Administrator) {
+    const products = await this.productService.findAll(user);
     return AppResponseDTO.success(
       'strings.products_fetched',
       this.modelMapperService.entityToDto(ProductDto, products),
@@ -54,8 +59,12 @@ export class ProductController {
   }
 
   @Get('search')
-  async search(@Query() search: SearchProductDto) {
-    const products = await this.productService.search(search);
+  @UseGuards(OptionalJwtAuthGuard)
+  async search(
+    @Query() search: SearchProductDto,
+    @User() user: Customer | Administrator,
+  ) {
+    const products = await this.productService.search(search, user);
     return AppResponseDTO.success(
       'strings.products_fetched',
       this.modelMapperService.entityToDto(ProductDto, products),
@@ -63,7 +72,7 @@ export class ProductController {
   }
 
   @Get(':id')
-  @UseGuards(FetchGuard, OptionalJwtAuthGuard)
+  @UseGuards(FetchGuard, OptionalJwtAuthGuard, ReadPermissionGuard)
   findOne(@DataParam('product') product: Product) {
     return AppResponseDTO.success(
       'strings.product_fetched',

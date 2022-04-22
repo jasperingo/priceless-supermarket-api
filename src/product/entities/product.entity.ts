@@ -1,4 +1,5 @@
 import { Category } from 'src/category/entities/category.entity';
+import { OrderItem } from 'src/order/entities/order-item.entity';
 import { Photo } from 'src/photo/entities/photo.entity';
 import {
   Column,
@@ -6,6 +7,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -51,4 +53,7 @@ export class Product {
 
   @OneToOne(() => Photo, (photo) => photo.product, { eager: true })
   photo: Photo;
+
+  @OneToMany(() => OrderItem, (item) => item.product)
+  orderItems: OrderItem[];
 }

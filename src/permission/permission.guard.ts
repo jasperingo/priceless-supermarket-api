@@ -13,6 +13,14 @@ export class PermissionGuard {
   ) {}
 
   getAbility(req: any) {
+    const ability = this.getOptionalAbility(req);
+
+    if (ability === null) throw this.getForbidden();
+
+    return ability;
+  }
+
+  getOptionalAbility(req: any) {
     const user = req.user;
 
     if (user instanceof Customer) {
@@ -21,7 +29,7 @@ export class PermissionGuard {
       return this.administratorPermissionFactory.create(user);
     }
 
-    throw this.getForbidden();
+    return null;
   }
 
   getForbidden() {

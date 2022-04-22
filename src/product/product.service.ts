@@ -8,6 +8,8 @@ import { ProductRepository } from './product.repository';
 import { Category } from 'src/category/entities/category.entity';
 import { PaginationService } from 'src/utils/pagination/pagination.service';
 import { SearchProductDto } from './dto/search-product.dto';
+import { Administrator } from 'src/administrator/entities/administrator.entity';
+import { Customer } from 'src/customer/entities/customer.entity';
 
 @Injectable()
 export class ProductService {
@@ -37,9 +39,17 @@ export class ProductService {
     });
   }
 
-  findAll() {
+  findAll(user: Customer | Administrator) {
+    let startWhereClause = true;
+    const qb = this.productsRepository.getQueryBuilder();
+
+    if (!user || user instanceof Customer) {
+      startWhereClause = false;
+      qb.where('NOT product.available = :available', { available: false });
+    }
+
     return this.paginationService
-      .paginateQuery('product.id', this.productsRepository.getQueryBuilder())
+      .paginateQuery('product.id', qb, startWhereClause)
       .orderBy('product.createdAt', 'DESC')
       .getMany();
   }
@@ -56,7 +66,7 @@ export class ProductService {
     return this.productsRepository.save(product);
   }
 
-  search(search: SearchProductDto) {
+  search(search: SearchProductDto, user: Customer | Administrator) {
     const qb = this.productsRepository.getQueryBuilder();
 
     if (search.q) {
@@ -68,6 +78,10 @@ export class ProductService {
       search.q
         ? qb.andWhere('category.id = :categoryId', categoryParam)
         : qb.where('category.id = :categoryId', categoryParam);
+    }
+
+    if (!user || user instanceof Customer) {
+      qb.andWhere('NOT product.available = :available', { available: false });
     }
 
     this.paginationService.paginateQuery('product.id', qb, false);

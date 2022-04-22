@@ -18,9 +18,11 @@ export class CustomerPermissionFactory {
       Ability as AbilityClass<AppAbility>,
     );
 
+    can(Action.ReadList, Product);
+    can([Action.Read, Action.ReadList], Category);
+    can(Action.Read, Product, { available: true });
     can(Action.Read, Customer, { id: customer.id });
     can(Action.Update, Customer, { id: customer.id });
-    can([Action.Read, Action.ReadList], [Product, Category]);
 
     return build({
       detectSubjectType: (item) =>

@@ -25,6 +25,7 @@ import { PaginationService } from './utils/pagination/pagination.service';
 import { CategoryModule } from './category/category.module';
 import { PhotoModule } from './photo/photo.module';
 import { ProductModule } from './product/product.module';
+import { OrderModule } from './order/order.module';
 
 @Global()
 @Module({
@@ -90,6 +91,7 @@ import { ProductModule } from './product/product.module';
     CategoryModule,
     PhotoModule,
     ProductModule,
+    OrderModule,
   ],
   exports: [
     ConfigModule,
