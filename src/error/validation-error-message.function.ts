@@ -6,7 +6,13 @@ export const validationErrorMessage = (
   message: string,
   errorCode: ErrorCode,
   propertyName?: string,
-) => `${message} | ${errorCode} | ${propertyName}`;
+) => ({
+  message,
+  context: {
+    errorCode,
+    propertyName,
+  },
+});
 
 export const requiredErrorMessage = (propertyName?: string) =>
   validationErrorMessage(
@@ -29,22 +35,26 @@ export const booleanErrorMessage = (propertyName?: string) =>
     propertyName,
   );
 
+const errorMapper = (i18n: I18nService, error: ValidationError) => {
+  const context = error.contexts ? Object.values(error.contexts)[0] : null;
+  const errorMessage = error.constraints
+    ? Object.values(error.constraints)[0]
+    : null;
+
+  return {
+    value: error.value,
+    message: errorMessage && i18n.t(errorMessage),
+    error_code: context?.errorCode ?? ErrorCode.FIELD_INVALID,
+    name: context?.propertyName ?? error.property,
+    errors: error.children?.map((error) => errorMapper(i18n, error)),
+  };
+};
+
 export const appValidationErrorFactory =
   (i18n: I18nService) =>
-  (validationErrors: ValidationError[] = []) =>
-    new BadRequestException(
-      validationErrors.map((error) => {
-        const [errorMessage, errorCode, propertyName] = Object.values(
-          error.constraints,
-        )[0].split(' | ');
-        return {
-          value: error.value,
-          message: i18n.t(errorMessage),
-          error_code: errorCode ?? ErrorCode.FIELD_INVALID,
-          name:
-            propertyName === 'undefined' || !propertyName
-              ? error.property
-              : propertyName,
-        };
-      }),
+  (validationErrors: ValidationError[] = []) => {
+    console.log(validationErrors);
+    return new BadRequestException(
+      validationErrors.map((error) => errorMapper(i18n, error)),
     );
+  };
