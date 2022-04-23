@@ -13,6 +13,10 @@ import { Product } from 'src/product/entities/product.entity';
 import { Action } from './Action.enum';
 import { AppAbility, Subjects } from './subject.type';
 
+type FlatOrder = Order & {
+  'customer.id': Order['customer']['id'];
+};
+
 @Injectable()
 export class CustomerPermissionFactory {
   create(customer: Customer, order?: Order) {
@@ -22,7 +26,9 @@ export class CustomerPermissionFactory {
 
     can(Action.Create, Order);
     can(Action.ReadList, Product);
-    can([Action.Read, Action.ReadList], Order, { id: customer.id });
+    can<FlatOrder>([Action.Read, Action.ReadList], Order, {
+      'customer.id': customer.id,
+    });
     can(Action.Update, OrderItem, ['fulfilledAt'], { order });
     can([Action.Read, Action.ReadList], Category);
     can(Action.Read, Product, { available: true });

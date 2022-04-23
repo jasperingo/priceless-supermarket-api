@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
 import { ModelMapperService } from 'src/utils/model-mapper/model-mapper.service';
 import { Order } from './entities/order.entity';
 import { AppResponseDTO } from 'src/utils/app-response.dto';
@@ -21,6 +12,9 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { OrderItem } from './entities/order-item.entity';
 import { Product } from 'src/product/entities/product.entity';
 import { ReadListPermissionGuard } from './guards/read-list-permission.guard';
+import { ReadPermissionGuard } from './guards/read-permission.guard';
+import { FetchGuard } from './guards/fetch.guard';
+import { DataParam } from 'src/utils/data-param.decorator';
 
 @Controller('orders')
 export class OrderController {
@@ -64,12 +58,11 @@ export class OrderController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orderService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.orderService.update(+id, updateOrderDto);
+  @UseGuards(FetchGuard, JwtAuthGuard, ReadPermissionGuard)
+  findOne(@DataParam('order') order: Order) {
+    return AppResponseDTO.success(
+      'strings.order_fetched',
+      this.modelMapperService.entityToDto(OrderDto, order),
+    );
   }
 }

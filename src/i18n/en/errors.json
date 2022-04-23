@@ -28,6 +28,7 @@
   "product_do_not_exist": "Product do not exist",
   "customer_do_not_exist": "Customer do not exist",
   "administrator_do_not_exist": "Administrator do not exist",
+  "order_do_not_exist": "Order do not exist",
 
   "photo_name_generation_failed": "A unique photo name could not be generated, please try again",
   "photo_category_id_exists": "This photo already has a category",
