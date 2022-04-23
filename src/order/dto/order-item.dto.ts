@@ -1,5 +1,6 @@
 import { Expose, Type } from 'class-transformer';
 import { ProductDto } from 'src/product/dto/product.dto';
+import { OrderDto } from './order.dto';
 
 export class OrderItemDto {
   id: number;
@@ -7,6 +8,8 @@ export class OrderItemDto {
   amount: number;
 
   quanity: number;
+
+  status: string;
 
   @Type(() => Date)
   @Expose({ name: 'processed_at' })
@@ -26,4 +29,7 @@ export class OrderItemDto {
 
   @Type(() => ProductDto)
   product: ProductDto;
+
+  @Type(() => OrderDto)
+  order: OrderDto;
 }

@@ -8,10 +8,18 @@ import { OrderRepository } from './order.repository';
 import { OrderItem } from './entities/order-item.entity';
 import { OrderItemRepository } from './order-item.repository';
 import { IsValidLocationPipe } from './pipes/is-valid-location.pipe';
+import { OrderItemController } from './order-item/order-item.controller';
+import { OrderItemService } from './order-item/order-item.service';
+import { IsValidItemStatusPipe } from './pipes/is-valid-item-status.pipe';
 
 @Module({
-  controllers: [OrderController],
-  providers: [OrderService, IsValidLocationPipe],
+  controllers: [OrderController, OrderItemController],
+  providers: [
+    OrderService,
+    IsValidLocationPipe,
+    OrderItemService,
+    IsValidItemStatusPipe,
+  ],
   imports: [
     TypeOrmModule.forFeature([
       Order,

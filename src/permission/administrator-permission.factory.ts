@@ -12,6 +12,10 @@ import {
 import { Category } from 'src/category/entities/category.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
 import { Order } from 'src/order/entities/order.entity';
+import {
+  OrderItem,
+  OrderItemStatus,
+} from 'src/order/entities/order-item.entity';
 import { Photo } from 'src/photo/entities/photo.entity';
 import { Product } from 'src/product/entities/product.entity';
 import { Action } from './Action.enum';
@@ -28,6 +32,15 @@ export class AdministratorPermissionFactory {
     can([Action.Read, Action.ReadList], Order);
     can([Action.Read, Action.ReadList], Customer);
     can(Action.Manage, [Photo, Product, Category]);
+    can(Action.Update, OrderItem, 'status', {
+      status: OrderItemStatus.PENDING,
+    });
+    can(Action.Update, OrderItem, 'processedAt', {
+      processedAt: null,
+    });
+    can(Action.Update, OrderItem, 'transportedAt', {
+      transportedAt: null,
+    });
 
     if (administrator.type === AdministratorType.ASSISTANT) {
       can(Action.Manage, Administrator, { id: administrator.id });

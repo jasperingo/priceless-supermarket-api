@@ -52,9 +52,7 @@ const errorMapper = (i18n: I18nService, error: ValidationError) => {
 
 export const appValidationErrorFactory =
   (i18n: I18nService) =>
-  (validationErrors: ValidationError[] = []) => {
-    console.log(validationErrors);
-    return new BadRequestException(
+  (validationErrors: ValidationError[] = []) =>
+    new BadRequestException(
       validationErrors.map((error) => errorMapper(i18n, error)),
     );
-  };

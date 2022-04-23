@@ -9,6 +9,13 @@ import {
 } from 'typeorm';
 import { Order } from './order.entity';
 
+export enum OrderItemStatus {
+  PENDING = 'pending',
+  CANCELLED = 'cancelled',
+  ACCEPTED = 'accepted',
+  DECLINED = 'declined',
+}
+
 @Entity({ name: 'order_items' })
 export class OrderItem {
   @PrimaryGeneratedColumn()
@@ -19,6 +26,9 @@ export class OrderItem {
 
   @Column()
   quantity: number;
+
+  @Column({ type: 'enum', enum: OrderItemStatus })
+  status: OrderItemStatus;
 
   @Column({ name: 'processed_at', type: 'datetime' })
   processedAt: Date;

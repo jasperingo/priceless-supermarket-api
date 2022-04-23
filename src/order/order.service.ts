@@ -4,6 +4,7 @@ import { PaginationService } from 'src/utils/pagination/pagination.service';
 import { StringGeneratorService } from 'src/utils/string-generator/string-generator.service';
 import { Connection } from 'typeorm';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { OrderItemStatus } from './entities/order-item.entity';
 import { Order } from './entities/order.entity';
 import { OrderItemRepository } from './order-item.repository';
 import { OrderRepository } from './order.repository';
@@ -18,10 +19,10 @@ export class OrderService {
   ) {}
 
   create(createOrder: Order) {
-    return this.dbConnection.transaction(async (manger) => {
-      const orderRepo = manger.getCustomRepository(OrderRepository);
-      const productRepo = manger.getCustomRepository(ProductRepository);
-      const orderItemRepo = manger.getCustomRepository(OrderItemRepository);
+    return this.dbConnection.transaction(async (manager) => {
+      const orderRepo = manager.getCustomRepository(OrderRepository);
+      const productRepo = manager.getCustomRepository(ProductRepository);
+      const orderItemRepo = manager.getCustomRepository(OrderItemRepository);
 
       createOrder.number = await this.stringGeneratorService
         .setExists(orderRepo.existsByNumber.bind(orderRepo))
@@ -45,6 +46,7 @@ export class OrderService {
       await orderItemRepo.save(
         createOrder.orderItems.map((item) => {
           item.order = order;
+          item.status = OrderItemStatus.PENDING;
           return item;
         }),
       );

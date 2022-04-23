@@ -28,5 +28,7 @@
 
   "order_created": "Order created",
   "order_fetched": "Order fetched",
-  "orders_fetched": "Orders fetched"
+  "orders_fetched": "Orders fetched",
+
+  "order_item_updated": "Order item updated"
 }
