@@ -11,6 +11,7 @@ import {
 } from 'src/administrator/entities/administrator.entity';
 import { Category } from 'src/category/entities/category.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
+import { Order } from 'src/order/entities/order.entity';
 import { Photo } from 'src/photo/entities/photo.entity';
 import { Product } from 'src/product/entities/product.entity';
 import { Action } from './Action.enum';
@@ -24,6 +25,7 @@ export class AdministratorPermissionFactory {
     );
 
     can(Action.Update, Customer, ['status']);
+    can([Action.Read, Action.ReadList], Order);
     can([Action.Read, Action.ReadList], Customer);
     can(Action.Manage, [Photo, Product, Category]);
 

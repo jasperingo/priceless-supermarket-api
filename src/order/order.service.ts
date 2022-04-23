@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ProductRepository } from 'src/product/product.repository';
+import { PaginationService } from 'src/utils/pagination/pagination.service';
 import { StringGeneratorService } from 'src/utils/string-generator/string-generator.service';
 import { Connection } from 'typeorm';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -12,6 +13,7 @@ export class OrderService {
   constructor(
     private readonly dbConnection: Connection,
     private readonly orderRepository: OrderRepository,
+    private readonly paginationService: PaginationService,
     private readonly stringGeneratorService: StringGeneratorService,
   ) {}
 
@@ -52,7 +54,18 @@ export class OrderService {
   }
 
   findAll() {
-    return `This action returns all order`;
+    return this.paginationService
+      .paginateQuery(
+        'order.id',
+        this.orderRepository
+          .createQueryBuilder('order')
+          .leftJoinAndSelect('order.customer', 'customer')
+          .leftJoinAndSelect('order.orderItems', 'orderItems')
+          .leftJoinAndSelect('orderItems.product', 'product')
+          .leftJoinAndSelect('product.photo', 'photo'),
+      )
+      .orderBy('order.createdAt', 'DESC')
+      .getMany();
   }
 
   findOne(id: number) {
@@ -61,9 +74,5 @@ export class OrderService {
 
   update(id: number, updateOrderDto: UpdateOrderDto) {
     return `This action updates a #${id} order ${updateOrderDto.toString()}`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} order`;
   }
 }

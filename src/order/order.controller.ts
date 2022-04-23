@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   UseGuards,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
@@ -21,7 +20,7 @@ import { CreatePermissionGuard } from './guards/create-permission.guard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { OrderItem } from './entities/order-item.entity';
 import { Product } from 'src/product/entities/product.entity';
-import { ReadListPermissionPipe } from './guards/read-list-permission.pipe';
+import { ReadListPermissionGuard } from './guards/read-list-permission.guard';
 
 @Controller('orders')
 export class OrderController {
@@ -55,9 +54,13 @@ export class OrderController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard, ReadListPermissionPipe)
-  findAll() {
-    return this.orderService.findAll();
+  @UseGuards(JwtAuthGuard, ReadListPermissionGuard)
+  async findAll() {
+    const orders = await this.orderService.findAll();
+    return AppResponseDTO.success(
+      'strings.orders_fetched',
+      this.modelMapperService.entityToDto(OrderDto, orders),
+    );
   }
 
   @Get(':id')
@@ -68,10 +71,5 @@ export class OrderController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
     return this.orderService.update(+id, updateOrderDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.orderService.remove(+id);
   }
 }
