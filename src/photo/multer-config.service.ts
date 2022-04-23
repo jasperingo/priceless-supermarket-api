@@ -9,6 +9,7 @@ import { PhotoRepository } from './photo.repository';
 import { StringGeneratorService } from 'src/utils/string-generator/string-generator.service';
 import { ErrorCode } from 'src/error/error-code.constants';
 import { PhotoLocationService } from './photo-location.service';
+import { Photo } from './entities/photo.entity';
 
 @Injectable()
 export class MulterConfigService implements MulterOptionsFactory {
@@ -21,7 +22,7 @@ export class MulterConfigService implements MulterOptionsFactory {
     const ext = path.extname(fileName);
     const name = await this.stringGeneratorService
       .setExists((name) => this.photoRepostory.existsByName(`${name}${ext}`))
-      .generate(20);
+      .generate(Photo.NAME_LENGTH);
 
     if (name === undefined)
       throw new InternalServerErrorException(

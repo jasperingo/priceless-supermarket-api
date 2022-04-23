@@ -5,15 +5,15 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { CategoryRepository } from '../category.repository';
+import { ProductRepository } from '../product.repository';
 
 @Injectable()
 @ValidatorConstraint({ async: true })
 export class IsExistingPipe implements ValidatorConstraintInterface {
-  constructor(private readonly categoryRepository: CategoryRepository) {}
+  constructor(private readonly productRepository: ProductRepository) {}
 
   validate(id: number) {
-    return this.categoryRepository.existsById(id);
+    return this.productRepository.existsById(id);
   }
 }
 

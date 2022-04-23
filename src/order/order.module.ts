@@ -7,10 +7,11 @@ import { Order } from './entities/order.entity';
 import { OrderRepository } from './order.repository';
 import { OrderItem } from './entities/order-item.entity';
 import { OrderItemRepository } from './order-item.repository';
+import { IsValidLocationPipe } from './pipes/is-valid-location.pipe';
 
 @Module({
   controllers: [OrderController],
-  providers: [OrderService],
+  providers: [OrderService, IsValidLocationPipe],
   imports: [
     TypeOrmModule.forFeature([
       Order,

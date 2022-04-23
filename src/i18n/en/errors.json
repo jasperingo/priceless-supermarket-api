@@ -4,6 +4,8 @@
   "field_not_boolean": "This field has to be a boolean",
   "field_min_length": "This field is below the minimium allowed length",
   "field_not_array": "This field has to be an array",
+  "field_has_duplicates": "This field contains duplicate values",
+  "field_do_not_exist": "This field do not exist",
   "name_exists": "This name already exists",
   "barcode_exists": "This barcode already exists",
   "email_address_invalid": "This email address is invalid",

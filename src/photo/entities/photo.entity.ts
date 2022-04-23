@@ -11,6 +11,8 @@ import {
 
 @Entity({ name: 'photos' })
 export class Photo {
+  static readonly NAME_LENGTH = 20;
+
   @PrimaryGeneratedColumn()
   id: number;
 

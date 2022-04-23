@@ -12,6 +12,8 @@ import { OrderItem } from './order-item.entity';
 
 @Entity({ name: 'orders' })
 export class Order {
+  static readonly NUMBER_LENGTH = 8;
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,6 +22,9 @@ export class Order {
 
   @Column()
   total: number;
+
+  @Column({ name: 'delivery_address_street' })
+  deliveryAddressStreet: string;
 
   @Column({ name: 'delivery_address_city' })
   deliveryAddressCity: string;
@@ -34,6 +39,6 @@ export class Order {
   @JoinColumn({ name: 'customer_id' })
   customer: Customer;
 
-  @OneToMany(() => OrderItem, (item) => item.order)
+  @OneToMany(() => OrderItem, (item) => item.order, { eager: true })
   orderItems: OrderItem[];
 }

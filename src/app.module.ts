@@ -26,6 +26,7 @@ import { CategoryModule } from './category/category.module';
 import { PhotoModule } from './photo/photo.module';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Global()
 @Module({
@@ -84,6 +85,7 @@ import { OrderModule } from './order/order.module';
         watch: true,
       },
     }),
+    HttpModule,
     CustomerModule,
     AuthModule,
     PermissionModule,
@@ -94,6 +96,7 @@ import { OrderModule } from './order/order.module';
     OrderModule,
   ],
   exports: [
+    HttpModule,
     ConfigModule,
     ModelMapperService,
     PasswordHashService,

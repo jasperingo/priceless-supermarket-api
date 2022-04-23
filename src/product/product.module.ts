@@ -7,10 +7,16 @@ import { Product } from './entities/product.entity';
 import { ProductRepository } from './product.repository';
 import { IsUniqueNamePipe } from './pipes/is-unique-name.pipe';
 import { IsUniqueBarcodePipe } from './pipes/is-unique-barcode.pipe';
+import { IsExistingPipe } from './pipes/is-existing.pipe';
 
 @Module({
   controllers: [ProductController],
-  providers: [ProductService, IsUniqueNamePipe, IsUniqueBarcodePipe],
+  providers: [
+    ProductService,
+    IsUniqueNamePipe,
+    IsUniqueBarcodePipe,
+    IsExistingPipe,
+  ],
   imports: [
     TypeOrmModule.forFeature([Product, ProductRepository]),
     PermissionModule,

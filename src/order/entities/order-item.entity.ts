@@ -18,7 +18,7 @@ export class OrderItem {
   amount: number;
 
   @Column()
-  quanity: number;
+  quantity: number;
 
   @Column({ name: 'processed_at', type: 'datetime' })
   processedAt: Date;
@@ -36,7 +36,7 @@ export class OrderItem {
   @JoinColumn({ name: 'order_id' })
   order: Order;
 
-  @ManyToOne(() => Product, (product) => product.orderItems)
+  @ManyToOne(() => Product, (product) => product.orderItems, { eager: true })
   @JoinColumn({ name: 'product_id' })
   product: Product;
 }

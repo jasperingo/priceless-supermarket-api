@@ -9,6 +9,15 @@ export class ProductRepository extends Repository<Product> {
       .leftJoinAndSelect('product.category', 'category');
   }
 
+  async existsById(id: number) {
+    try {
+      await this.findOneOrFail(id, { select: ['id'] });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   async existsByName(name: string) {
     try {
       await this.findOneOrFail({ select: ['id'], where: { name } });
