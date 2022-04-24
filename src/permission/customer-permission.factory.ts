@@ -46,6 +46,7 @@ export class CustomerPermissionFactory {
     });
     can<FlatOrderItem>(Action.Update, OrderItem, 'fulfilledAt', {
       'order.customer.id': customer.id,
+      transportedAt: { $ne: null },
       fulfilledAt: null,
     });
 

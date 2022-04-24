@@ -34,5 +34,7 @@
 
   "photo_name_generation_failed": "A unique photo name could not be generated, please try again",
   "photo_category_id_exists": "This photo already has a category",
-  "photo_product_id_exists": "This photo already has a product"
+  "photo_product_id_exists": "This photo already has a product",
+
+  "product_out_of_stock": "The ordered quantity is more than product quantity in stock"
 }

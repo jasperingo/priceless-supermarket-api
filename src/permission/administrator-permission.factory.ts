@@ -36,9 +36,11 @@ export class AdministratorPermissionFactory {
       status: OrderItemStatus.PENDING,
     });
     can(Action.Update, OrderItem, 'processedAt', {
+      status: OrderItemStatus.ACCEPTED,
       processedAt: null,
     });
     can(Action.Update, OrderItem, 'transportedAt', {
+      processedAt: { $ne: null },
       transportedAt: null,
     });
 
