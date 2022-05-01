@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { Customer } from 'src/customer/entities/customer.entity';
 import { ProductRepository } from 'src/product/product.repository';
 import { PaginationService } from 'src/utils/pagination/pagination.service';
 import { StringGeneratorService } from 'src/utils/string-generator/string-generator.service';
 import { Connection } from 'typeorm';
-import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderItemStatus } from './entities/order-item.entity';
 import { Order } from './entities/order.entity';
 import { OrderItemRepository } from './order-item.repository';
@@ -57,24 +57,22 @@ export class OrderService {
 
   findAll() {
     return this.paginationService
-      .paginateQuery(
-        'order.id',
-        this.orderRepository
-          .createQueryBuilder('order')
-          .leftJoinAndSelect('order.customer', 'customer')
-          .leftJoinAndSelect('order.orderItems', 'orderItems')
-          .leftJoinAndSelect('orderItems.product', 'product')
-          .leftJoinAndSelect('product.photo', 'photo'),
-      )
+      .paginateQuery('order.id', this.orderRepository.getQueryBuilder())
+      .orderBy('order.createdAt', 'DESC')
+      .getMany();
+  }
+
+  findAllByCustomer(customer: Customer) {
+    const qb = this.orderRepository.getQueryBuilder();
+    qb.where('customer.id = :id', { id: customer.id });
+
+    return this.paginationService
+      .paginateQuery('order.id', qb, false)
       .orderBy('order.createdAt', 'DESC')
       .getMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} order`;
-  }
-
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order ${updateOrderDto.toString()}`;
+    return this.orderRepository.findOne(id);
   }
 }

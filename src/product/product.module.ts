@@ -21,5 +21,6 @@ import { IsExistingPipe } from './pipes/is-existing.pipe';
     TypeOrmModule.forFeature([Product, ProductRepository]),
     PermissionModule,
   ],
+  exports: [TypeOrmModule],
 })
 export class ProductModule {}

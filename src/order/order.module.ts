@@ -11,6 +11,9 @@ import { IsValidLocationPipe } from './pipes/is-valid-location.pipe';
 import { OrderItemController } from './order-item/order-item.controller';
 import { OrderItemService } from './order-item/order-item.service';
 import { IsValidItemStatusPipe } from './pipes/is-valid-item-status.pipe';
+import { IsNotOutOfStockPipe } from './pipes/is-not-out-of-stock.pipe';
+import { ProductModule } from 'src/product/product.module';
+import { IsNotOutOfStockIfAcceptedPipe } from './pipes/is-not-out-of-stock-if-accepted.pipe';
 
 @Module({
   controllers: [OrderController, OrderItemController],
@@ -19,6 +22,8 @@ import { IsValidItemStatusPipe } from './pipes/is-valid-item-status.pipe';
     IsValidLocationPipe,
     OrderItemService,
     IsValidItemStatusPipe,
+    IsNotOutOfStockPipe,
+    IsNotOutOfStockIfAcceptedPipe,
   ],
   imports: [
     TypeOrmModule.forFeature([
@@ -28,6 +33,8 @@ import { IsValidItemStatusPipe } from './pipes/is-valid-item-status.pipe';
       OrderItemRepository,
     ]),
     PermissionModule,
+    ProductModule,
   ],
+  exports: [TypeOrmModule, OrderService],
 })
 export class OrderModule {}

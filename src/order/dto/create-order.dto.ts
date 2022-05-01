@@ -14,10 +14,17 @@ import {
 } from 'src/error/validation-error-message.function';
 import { IsExisting } from 'src/product/pipes/is-existing.pipe';
 import { IsNotDuplcateProduct } from '../pipes/is-not-duplcate-product.pipe';
+import { IsNotOutOfStock } from '../pipes/is-not-out-of-stock.pipe';
 import { IsValidLocation } from '../pipes/is-valid-location.pipe';
 
 export class CreateOrderItemDto {
   @Expose()
+  @IsNotOutOfStock(
+    validationErrorMessage(
+      'errors.product_out_of_stock',
+      ErrorCode.PRODUCT_OUT_OF_STOCK,
+    ),
+  )
   @IsNumber({}, numberErrorMessage())
   @IsNotEmpty(requiredErrorMessage())
   quantity: number;

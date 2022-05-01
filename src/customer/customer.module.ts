@@ -7,6 +7,7 @@ import { IsUniqueEmailConstraint } from './validators/is-unique-email.validator'
 import { IsUniquePhoneNumberConstraint } from './validators/is-unique-phone-number.validator';
 import { PermissionModule } from 'src/permission/permission.module';
 import { CustomerRepository } from './customer.repository';
+import { OrderModule } from 'src/order/order.module';
 
 @Module({
   controllers: [CustomerController],
@@ -18,6 +19,7 @@ import { CustomerRepository } from './customer.repository';
   imports: [
     TypeOrmModule.forFeature([Customer, CustomerRepository]),
     PermissionModule,
+    OrderModule,
   ],
   exports: [TypeOrmModule],
 })

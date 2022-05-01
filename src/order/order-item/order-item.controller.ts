@@ -18,6 +18,7 @@ import { UpdateItemFulfilledAtPermissionGuard } from '../guards/update-item-fulf
 import { UpdateItemProcessedAtPermissionGuard } from '../guards/update-item-processed-at-permission.guard';
 import { UpdateItemStatusPermissionGuard } from '../guards/update-item-status-permission.guard';
 import { UpdateItemTransportedAtPermissionGuard } from '../guards/update-item-transported-at-permission.guard';
+import { InjectOrderItemInterceptor } from './inject-order-item.interceptor';
 import { OrderItemService } from './order-item.service';
 
 @Controller('order-items')
@@ -28,7 +29,7 @@ export class OrderItemController {
   ) {}
 
   @Patch(':id/status')
-  @UseInterceptors(InjectUserInterceptor)
+  @UseInterceptors(InjectUserInterceptor, InjectOrderItemInterceptor)
   @UseGuards(FetchItemGuard, JwtAuthGuard, UpdateItemStatusPermissionGuard)
   async updateStatus(
     @DataParam('orderItem') orderIem: OrderItem,

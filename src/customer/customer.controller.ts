@@ -1,5 +1,7 @@
 import { Controller, Get, Post, Body, Patch, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { OrderDto } from 'src/order/dto/order.dto';
+import { OrderService } from 'src/order/order.service';
 import { AppResponseDTO } from 'src/utils/app-response.dto';
 import { DataParam } from 'src/utils/data-param.decorator';
 import { ModelMapperService } from 'src/utils/model-mapper/model-mapper.service';
@@ -16,6 +18,7 @@ import { UpdatePermissionGuard } from './guards/update-permission.guard';
 @Controller('customers')
 export class CustomerController {
   constructor(
+    private readonly orderService: OrderService,
     private readonly customerService: CustomerService,
     private readonly modelMapperService: ModelMapperService,
   ) {}
@@ -64,6 +67,16 @@ export class CustomerController {
     return AppResponseDTO.success(
       'strings.customer_updated',
       this.modelMapperService.entityToDto(CustomerDto, updatedCustomer),
+    );
+  }
+
+  @Get(':id/orders')
+  @UseGuards(FetchGuard, JwtAuthGuard, ReadPermissionGuard)
+  async findOrders(@DataParam('customer') customer: Customer) {
+    const orders = await this.orderService.findAllByCustomer(customer);
+    return AppResponseDTO.success(
+      'strings.orders_fetched',
+      this.modelMapperService.entityToDto(OrderDto, orders),
     );
   }
 }

@@ -6,9 +6,16 @@ import {
   validationErrorMessage,
 } from 'src/error/validation-error-message.function';
 import { OrderItemStatus } from '../entities/order-item.entity';
+import { IsNotOutOfStockIfAccepted } from '../pipes/is-not-out-of-stock-if-accepted.pipe';
 import { IsValidItemStatus } from '../pipes/is-valid-item-status.pipe';
 
 export class UpdateOrderItemStatusDto {
+  @IsNotOutOfStockIfAccepted(
+    validationErrorMessage(
+      'errors.product_out_of_stock',
+      ErrorCode.PRODUCT_OUT_OF_STOCK,
+    ),
+  )
   @IsValidItemStatus(
     validationErrorMessage(
       'errors.field_not_allowed',

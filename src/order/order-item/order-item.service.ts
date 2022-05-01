@@ -1,39 +1,35 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { I18nService } from 'nestjs-i18n';
-import { ErrorCode } from 'src/error/error-code.constants';
+import { Injectable } from '@nestjs/common';
 import { ProductRepository } from 'src/product/product.repository';
 import { Connection } from 'typeorm';
-import { OrderItem } from '../entities/order-item.entity';
+import { OrderItem, OrderItemStatus } from '../entities/order-item.entity';
 import { OrderItemRepository } from '../order-item.repository';
+import { OrderRepository } from '../order.repository';
 
 @Injectable()
 export class OrderItemService {
-  request = { user: new Date() };
   constructor(
-    private readonly i18nService: I18nService,
     private readonly dbConnection: Connection,
     private readonly orderItemRepository: OrderItemRepository,
   ) {}
 
   updateStatus(orderItem: OrderItem) {
     return this.dbConnection.transaction(async (manager) => {
+      const orderRepo = manager.getCustomRepository(OrderRepository);
       const productRepo = manager.getCustomRepository(ProductRepository);
       const orderItemRepo = manager.getCustomRepository(OrderItemRepository);
 
-      orderItem.product.quantity -= orderItem.quantity;
+      if (orderItem.status === OrderItemStatus.ACCEPTED) {
+        orderItem.product.quantity -= orderItem.quantity;
+        await productRepo.save(orderItem.product);
+      }
 
-      if (orderItem.product.quantity < 0)
-        throw new BadRequestException([
-          {
-            value: orderItem.status,
-            message: this.i18nService.t('errors.product_out_of_stock'),
-            error_code: ErrorCode.PRODUCT_OUT_OF_STOCK,
-            name: 'status',
-            errors: [],
-          },
-        ]);
-
-      await productRepo.save(orderItem.product);
+      if (
+        orderItem.status === OrderItemStatus.CANCELLED ||
+        orderItem.status === OrderItemStatus.DECLINED
+      ) {
+        orderItem.order.total -= orderItem.amount;
+        await orderRepo.save(orderItem.order);
+      }
 
       return orderItemRepo.save(orderItem);
     });

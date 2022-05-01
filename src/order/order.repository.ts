@@ -11,4 +11,12 @@ export class OrderRepository extends Repository<Order> {
       return false;
     }
   }
+
+  getQueryBuilder() {
+    return this.createQueryBuilder('order')
+      .leftJoinAndSelect('order.customer', 'customer')
+      .leftJoinAndSelect('order.orderItems', 'orderItems')
+      .leftJoinAndSelect('orderItems.product', 'product')
+      .leftJoinAndSelect('product.photo', 'photo');
+  }
 }
