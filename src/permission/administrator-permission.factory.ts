@@ -33,15 +33,13 @@ export class AdministratorPermissionFactory {
     can([Action.Read, Action.ReadList], Customer);
     can(Action.Manage, [Photo, Product, Category]);
     can(Action.Update, OrderItem, 'status', {
-      status: OrderItemStatus.PENDING,
-    });
-    can(Action.Update, OrderItem, 'processedAt', {
-      status: OrderItemStatus.ACCEPTED,
-      processedAt: null,
-    });
-    can(Action.Update, OrderItem, 'transportedAt', {
-      processedAt: { $ne: null },
-      transportedAt: null,
+      status: {
+        $nin: [
+          OrderItemStatus.CANCELLED,
+          OrderItemStatus.DECLINED,
+          OrderItemStatus.FULFILLED,
+        ],
+      },
     });
 
     if (administrator.type === AdministratorType.ASSISTANT) {

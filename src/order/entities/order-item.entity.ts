@@ -14,6 +14,9 @@ export enum OrderItemStatus {
   CANCELLED = 'cancelled',
   ACCEPTED = 'accepted',
   DECLINED = 'declined',
+  PROCESSING = 'processing',
+  TRANSPORTING = 'transporting',
+  FULFILLED = 'fulfilled',
 }
 
 @Entity({ name: 'order_items' })
