@@ -11,9 +11,13 @@ export class ReadPermissionGuard
     const req = context.switchToHttp().getRequest();
     const ability = this.getOptionalAbility(req);
 
-    if (ability !== null && ability.can(Action.Read, req.data.product))
+    if (
+      (ability !== null && ability.can(Action.Read, req.data.product)) ||
+      req.data.product.available
+    ) {
       return true;
+    }
 
-    if (req.data.product.available === false) throw this.getForbidden();
+    throw this.getForbidden();
   }
 }
